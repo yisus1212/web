@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Carrito de Compras</title>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Carrito de Compras</h1>
+        <table id="tabla-carrito">
+            <thead>
+                <tr>
+                    <th>Imagen</th>
+                    <th>Producto</th>
+                    <th>Precio Unitario</th>
+                    <th>Cantidad</th>
+                    <th>Total</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Productos cargados aquí -->
+            </tbody>
+        </table>
+        <div class="total" id="total-carrito">Total: $0</div>
+        <button class="btn" id="seguir-comprando">Seguir Comprando</button>
+        <button class="btn btn-danger" id="vaciar-carrito">Vaciar Carrito</button>
+        <button class="btn" id="comprar-carrito">Comprar</button>
+        <div id="mensaje-compra"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const tablaCarrito = document.getElementById('tabla-carrito').getElementsByTagName('tbody')[0];
+            const totalCarrito = document.getElementById('total-carrito');
+            const btnSeguirComprando = document.getElementById('seguir-comprando');
+            const btnVaciarCarrito = document.getElementById('vaciar-carrito');
+            const btnComprar = document.getElementById('comprar-carrito');
+            const mensajeCompra = document.getElementById('mensaje-compra');
+
+            function cargarCarrito() {
+                const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+                tablaCarrito.innerHTML = '';
+                let total = 0;
+
+                carrito.forEach((item, index) => {
+                    const fila = tablaCarrito.insertRow();
+                    fila.innerHTML = `
+                        <td><img src="${item.imagen}" alt="${item.producto}"></td>
+                        <td>${item.producto}</td>
+                        <td>$${item.precioUnitario}</td>
+                        <td>${item.cantidad}</td>
+                        <td>$${item.total}</td>
+                        <td><button class="btn btn-danger" data-index="${index}">Eliminar</button></td>
+                    `;
+                    total += item.total;
+                });
+
+                totalCarrito.textContent = `Total: $${total}`;
+            }
+
+            tablaCarrito.addEventListener('click', function (e) {
+                if (e.target.tagName === 'BUTTON') {
+                    const index = e.target.getAttribute('data-index');
+                    eliminarProducto(index);
+                }
+            });
+
+            function eliminarProducto(index) {
+                let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+                carrito.splice(index, 1);
+                localStorage.setItem('carrito', JSON.stringify(carrito));
+                cargarCarrito();
+            }
+
+            btnSeguirComprando.addEventListener('click', function () {
+                window.location.href = 'index.html'; 
+            });
+
+            btnVaciarCarrito.addEventListener('click', function () {
+                localStorage.removeItem('carrito');
+                cargarCarrito();
+                mensajeCompra.textContent = '';
+            });
+            
+            btnComprar.addEventListener('click', function () {
+                const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+                if (carrito.length === 0) {
+                    mensajeCompra.textContent = "Tu carrito está vacío. Agrega productos antes de comprar.";
+                    return;
+                }
+
+                // Crear el mensaje de WhatsApp con los productos del carrito
+                let mensaje = "¡Hola! Quiero comprar los siguientes productos:\n";
+                carrito.forEach(item => {
+                    mensaje += `- ${item.cantidad} x ${item.producto} a $${item.precioUnitario} c/u\n`;
+                });
+                mensaje += `\nTotal: $${totalCarrito.textContent.replace('Total: $', '')}`;
+                
+                
+                const mensajeCodificado = encodeURIComponent(mensaje);
+
+                
+                const numeroTelefono = "5214423172660"; 
+
+                
+                const url = `https://wa.me/${numeroTelefono}?text=${mensajeCodificado}`;
+
+                
+                window.open(url, '_blank');
+
+                
+                mensajeCompra.textContent = "¡Gracias por tu compra! Te redirigiremos a WhatsApp para completar el pedido.";
+                localStorage.removeItem('carrito');
+                cargarCarrito();
+            });
+
+            cargarCarrito();
+        });
+    </script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 24px;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+        }
+        img {
+            width: 50px;
+            height: auto;
+        }
+        .total {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .btn {
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 8px;
+            background-color: #007bff;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+        }
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+        #mensaje-compra {
+            margin-top: 20px;
+            font-weight: bold;
+            color: green;
+        }
+    </style>
+</body>
+</html>

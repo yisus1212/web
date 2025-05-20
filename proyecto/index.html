@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compra</title>
+
+    
+    <link rel="icon" href="Imagenes/Logo.ico" type="image/png">
+
+
+
+<body>
+
+    
+    <img src="Imagenes/Logo2.png" alt="Logo2" class="logo">
+
+    <div class="container">
+        <h1>¡Hola y bienvenido a C Sports Shop!</h1>
+        <p>
+            Actualmente, contamos exclusivamente con gorras de gran estilo, ¡pero pronto tendremos mucho más!<br>
+            Echa un vistazo a nuestro catálogo y ordena lo que más te guste. ¡No te lo pierdas!
+        </p>
+
+        <div class="gorras-grid" id="gorras-container">
+            
+        </div>
+    </div>
+
+    
+    <button id="carrito-boton"><img src="Imagenes/carrito4.png" alt="carrito" class="carrito" id="ima_carrito"></button>
+
+    <script>
+        const gorras = [
+            { id: 'puerquito', nombre: 'Gorra de puerquito', precio: 300 },
+            { id: 'Pablito', nombre: 'Pablito', precio: 300 },
+            { id: 'ajolote blanco y gris', nombre: 'Ajolote blanco y gris', precio: 300 },
+            { id: 'patos', nombre: 'Gorra de Patos', precio: 300 },
+            { id: 'spiderman', nombre: 'Gorra de spiderman', precio: 300 },
+            { id: 'ajolote negro', nombre: 'Gorra de ajolote negro', precio: 300 },
+            { id: 'spiderman negro', nombre: 'Gorra de spiderman negro', precio: 300 },
+            { id: 'tiburon', nombre: 'Gorra de tiburon', precio: 300 },
+            { id: 'ajolote morado', nombre: 'Gorra de ajolote morado', precio: 300 },
+            { id: 'México', nombre: 'Gorra de México', precio: 300 },
+        ];
+
+        const container = document.getElementById('gorras-container');
+
+        gorras.forEach(gorra => {
+            const button = document.createElement('button');
+            button.innerHTML = `<img src="gorras/${gorra.id}.png" alt="${gorra.id}"><br>${gorra.nombre}<br>$${gorra.precio}`;
+            button.onclick = () => {
+                
+                window.location.href = `articulos.html?producto=${gorra.id}`;
+            };
+            container.appendChild(button);
+        });
+
+        document.getElementById('carrito-boton').addEventListener('click', () => {
+            window.location.href = 'carrito.html'; 
+        });
+    </script>
+
+<br><br><br><br><br><br><br><br><br><br><br><br>
+Equipando sueños,
+creando campeones
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f4f8;
+        text-align: center;
+        position: relative; 
+    }
+
+    .logo {
+        width: 150px;
+        position: absolute;
+        top: 20px;
+        left: 20px;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 30px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        padding-top: 70px; 
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    button {
+        padding: 10px;
+        margin: 10px;
+        border: none;
+        border-radius: 8px;
+        background-color: #007bff;
+        color: white;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    img {
+        width: 120px;
+        height: auto;
+        display: block;
+        margin: auto;
+    }
+
+    .gorras-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 20px;
+        margin-top: 30px;
+    }
+
+    #carrito-boton {
+        background-color: green;
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px;
+        border-radius: 50%;
+        border: none;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+    }
+
+    #ima_carrito {
+        width: 50px;
+        height: auto;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    #carrito-boton:hover {
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        transform: scale(1.1);
+    }
+
+    #carrito-boton:hover #ima_carrito {
+        transform: rotate(15deg);
+    }
+</style>
+
+</body>
+</html>
