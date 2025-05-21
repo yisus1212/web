@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Gorra</title>
+    <link rel="icon" href="Imagenes/Logo.ico" type="image/png">
 </head>
 <body>
 
@@ -101,7 +102,8 @@
         const precioTotal = cantidad * precioUnitario;
         const numero = '5214423172660'; // Tu número de WhatsApp
 
-        const mensajeWhatsApp = `Hola, quiero confirmar la compra de ${cantidad} gorra(s) "${nombreProducto}" por un total de $${precioTotal} MXN`;
+        // Crear mensaje de WhatsApp con enlace adicional
+        const mensajeWhatsApp = `Hola, quiero confirmar la compra de ${cantidad} gorra(s) "${nombreProducto}" por un total de $${precioTotal} MXN.\n\nPuedes ver más productos en este enlace: https://yisus1212.github.io/web/`;
 
         const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensajeWhatsApp)}`;
         window.open(url, '_blank');
