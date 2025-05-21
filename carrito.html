@@ -99,19 +99,17 @@
                 });
                 mensaje += `\nTotal: $${totalCarrito.textContent.replace('Total: $', '')}`;
                 
-                
+                // Agregar el enlace al final del mensaje
+                mensaje += `\n\nPuedes ver más productos en este enlace: https://yisus1212.github.io/web/`;
+
                 const mensajeCodificado = encodeURIComponent(mensaje);
 
-                
                 const numeroTelefono = "5214423172660"; 
 
-                
                 const url = `https://wa.me/${numeroTelefono}?text=${mensajeCodificado}`;
 
-                
                 window.open(url, '_blank');
 
-                
                 mensajeCompra.textContent = "¡Gracias por tu compra! Te redirigiremos a WhatsApp para completar el pedido.";
                 localStorage.removeItem('carrito');
                 cargarCarrito();
