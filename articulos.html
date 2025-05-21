@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gorra</title>
+</head>
+<body>
+
+<div class="container">
+    <div id="imagen-container"></div>
+
+    <p id="texto-pregunta">¿Te gustaría comprar la gorra ______?</p>
+
+    <div id="precio"></div>
+
+    <button id="Comprar">Comprar</button>
+    <button id="Regresar">Regresar</button>
+
+    <div id="stock">
+        <p>Escoge cuántas quieres (mínimo 1, máximo 5):</p>
+        <select name="gorras" id="gorras">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+
+        <div id="total"></div>
+
+        <br>
+        <button id="Confirmar">Confirmar compra</button>
+        <button id="AgregarCarrito">Agregar al carrito 🛒</button>
+
+        <button id="Cancelar">Cancelar</button>
+    </div>
+
+    <div id="mensaje"></div>
+</div>
+
+<button id="carrito-boton">
+    <img src="Imagenes/carrito4.png" alt="carrito" class="carrito" id="ima_carrito">
+</button>
+
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const producto = params.get('producto');
+
+    const imagenContainer = document.getElementById('imagen-container');
+    const textoPregunta = document.getElementById('texto-pregunta');
+    const precioDiv = document.getElementById('precio');
+    const totalDiv = document.getElementById('total');
+    const selectCantidad = document.getElementById('gorras');
+
+    let precioUnitario = 0;
+
+    if (producto) {
+        const imagen = document.createElement('img');
+        imagen.src = `gorras/${producto}.png`;
+        imagen.alt = producto;
+        imagen.id = "imagen-gorra";
+        imagenContainer.appendChild(imagen);
+
+        const nombreLimpio = producto.replace(/_/g, ' ');
+        textoPregunta.textContent = `¿Te gustaría comprar la gorra "${nombreLimpio}"?`;
+
+        precioUnitario = (producto === 'pablito2') ? 250 : 300;
+        precioDiv.textContent = `Precio unitario: $${precioUnitario} MXN`;
+
+        totalDiv.textContent = `Total: $${precioUnitario * selectCantidad.value} MXN`;
+    }
+
+    selectCantidad.addEventListener('change', () => {
+        const cantidad = parseInt(selectCantidad.value);
+        totalDiv.textContent = `Total: $${cantidad * precioUnitario} MXN`;
+    });
+
+    const Comprar = document.getElementById('Comprar');
+    const Regresar = document.getElementById('Regresar');
+    const stockDiv = document.getElementById('stock');
+    const Cancelar = document.getElementById('Cancelar');
+    const Confirmar = document.getElementById('Confirmar');
+    const mensaje = document.getElementById('mensaje');
+
+    Comprar.addEventListener('click', function () {
+        stockDiv.style.display = 'block';
+        mensaje.textContent = '';
+    });
+
+    Cancelar.addEventListener('click', function () {
+        stockDiv.style.display = 'none';
+        mensaje.textContent = '';
+    });
+
+    Regresar.addEventListener('click', function () {
+        window.location.href = 'index.html';
+    });
+
+    Confirmar.addEventListener('click', function () {
+        const cantidad = parseInt(selectCantidad.value);
+        const nombreProducto = producto.replace(/_/g, ' ');
+        const precioTotal = cantidad * precioUnitario;
+        const numero = '5214423172660'; // Tu número de WhatsApp
+
+        const mensajeWhatsApp = `Hola, quiero confirmar la compra de ${cantidad} gorra(s) "${nombreProducto}" por un total de $${precioTotal} MXN`;
+
+        const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensajeWhatsApp)}`;
+        window.open(url, '_blank');
+
+        mensaje.textContent = `Gracias por la compra, se está abriendo WhatsApp...`;
+        stockDiv.style.display = 'none';
+    });
+
+    const AgregarCarrito = document.getElementById('AgregarCarrito');
+
+    AgregarCarrito.addEventListener('click', function () {
+        const cantidad = parseInt(selectCantidad.value);
+        const nombreProducto = producto.replace(/_/g, ' ');
+        const precioTotal = cantidad * precioUnitario;
+
+        const item = {
+            producto: nombreProducto,
+            imagen: `gorras/${producto}.png`,
+            precioUnitario,
+            cantidad,
+            total: precioTotal
+        };
+
+        const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+        carrito.push(item);
+        localStorage.setItem('carrito', JSON.stringify(carrito));
+
+        mensaje.textContent = `Se agregó "${nombreProducto}" al carrito con ${cantidad} unidad(es).`;
+        stockDiv.style.display = 'none';
+    });
+
+    document.getElementById('carrito-boton').addEventListener('click', function () {
+        window.location.href = 'carrito.html';
+    });
+</script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        #imagen-gorra {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        p {
+            font-size: 18px;
+            margin: 20px 0;
+        }
+
+        button {
+            padding: 12px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 8px;
+            background-color: #007bff;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #stock {
+            display: none;
+            margin-top: 20px;
+        }
+
+        select {
+            padding: 8px;
+            font-size: 16px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        #precio {
+            font-size: 20px;
+            color: #007bff;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        #mensaje {
+            margin-top: 20px;
+            color: green;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        #total {
+            font-size: 18px;
+            margin-top: 10px;
+            color: #333;
+        }
+
+        #carrito-boton {
+            background-color: green;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px;
+            border-radius: 50%;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        #ima_carrito {
+            width: 50px;
+            height: auto;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        #carrito-boton:hover {
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+            transform: scale(1.1);
+        }
+
+        #carrito-boton:hover #ima_carrito {
+            transform: rotate(15deg);
+        }
+    </style>
+
+</body>
+
+</html>
